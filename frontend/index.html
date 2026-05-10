@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Link Security</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            font-family:'Poppins',sans-serif;
+
+            background:
+            linear-gradient(
+                135deg,
+                #020617,
+                #0f172a,
+                #111827
+            );
+
+            min-height:100vh;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            overflow:hidden;
+
+            color:white;
+        }
+
+        .bg{
+
+            position:absolute;
+
+            width:600px;
+            height:600px;
+
+            background:#2563eb;
+
+            filter:blur(180px);
+
+            opacity:.25;
+
+            border-radius:50%;
+
+            top:-200px;
+            left:-150px;
+        }
+
+        .bg2{
+
+            position:absolute;
+
+            width:500px;
+            height:500px;
+
+            background:#7c3aed;
+
+            filter:blur(180px);
+
+            opacity:.2;
+
+            border-radius:50%;
+
+            bottom:-150px;
+            right:-150px;
+        }
+
+        .container{
+
+            position:relative;
+
+            width: 70%;
+            max-width: 600px;
+            backdrop-filter:blur(25px);
+
+            background:rgba(255,255,255,.05);
+
+            border:1px solid rgba(255,255,255,.1);
+
+            border-radius:30px;
+
+            padding:20px;
+
+            box-shadow:
+            0 10px 40px rgba(0,0,0,.4);
+
+            z-index:2;
+        }
+
+        h1{
+
+            text-align:center;
+
+            font-size:42px;
+
+            margin-bottom:30px;
+
+            font-weight:700;
+        }
+
+        .input-group{
+
+            display:flex;
+
+            gap:15px;
+        }
+
+        input{
+
+            flex:1;
+
+            padding:18px;
+
+            border:none;
+
+            border-radius:18px;
+
+            outline:none;
+
+            background:rgba(255,255,255,.08);
+
+            color:white;
+
+            font-size:16px;
+        }
+
+        input::placeholder{
+            color:#cbd5e1;
+        }
+
+        button{
+
+            padding:18px 28px;
+
+            border:none;
+
+            border-radius:18px;
+
+            background:
+            linear-gradient(
+                135deg,
+                #2563eb,
+                #7c3aed
+            );
+
+            color:white;
+
+            font-size:16px;
+
+            cursor:pointer;
+
+            transition:.3s;
+        }
+
+        button:hover{
+
+            transform:translateY(-2px) scale(1.03);
+
+            box-shadow:
+            0 10px 25px rgba(124,58,237,.4);
+        }
+
+        .loading{
+
+            margin-top:25px;
+
+            text-align:center;
+
+            display:none;
+        }
+
+        .spinner{
+
+            width:45px;
+            height:45px;
+
+            border:4px solid rgba(255,255,255,.1);
+
+            border-top:4px solid #60a5fa;
+
+            border-radius:50%;
+
+            margin:auto;
+
+            animation:spin 1s linear infinite;
+        }
+
+        @keyframes spin{
+
+            100%{
+                transform:rotate(360deg);
+            }
+        }
+
+        .result{
+
+            margin-top:30px;
+
+            display:none;
+        }
+
+        .status{
+
+            text-align:center;
+
+            font-size:34px;
+
+            font-weight:700;
+
+            margin-bottom:20px;
+        }
+
+        .safe{
+            color:#22c55e;
+        }
+
+        .suspicious{
+            color:#facc15;
+        }
+
+        .dangerous{
+            color:#ef4444;
+        }
+
+        .meter{
+
+            width:100%;
+            height:18px;
+
+            background:rgba(255,255,255,.08);
+
+            border-radius:50px;
+
+            overflow:hidden;
+
+            margin-bottom:25px;
+        }
+
+        .meter-fill{
+
+            height:100%;
+
+            width:0%;
+
+            border-radius:50px;
+
+            transition:1s;
+        }
+
+        .grid{
+
+            display:grid;
+
+            grid-template-columns:1fr 1fr;
+
+            gap:16px;
+        }
+
+        .card{
+
+            background:rgba(255,255,255,.05);
+
+            padding:10px;
+
+            border-radius:15px;
+
+            border:1px solid rgba(255,255,255,.06);
+        }
+
+        .card h3{
+
+            font-size:14px;
+
+            color:#94a3b8;
+
+            margin-bottom:8px;
+        }
+
+        .card p{
+
+            font-size:20px;
+
+            font-weight:600;
+        }
+
+        .reasons{
+
+            margin-top:25px;
+
+            background:rgba(255,255,255,.05);
+
+            padding:20px;
+
+            border-radius:20px;
+
+            max-height: 220px;
+
+            overflow-y: auto;
+        }
+
+        .reasons::-webkit-scrollbar{
+
+            width:8px;
+        }
+
+        .reasons::-webkit-scrollbar-track{
+
+            background:rgba(255,255,255,.05);
+
+            border-radius:20px;
+        }
+
+        .reasons::-webkit-scrollbar-thumb{
+
+            background:
+            linear-gradient(
+                135deg,
+                #2563eb,
+                #7c3aed
+            );
+
+            border-radius:20px;
+        }
+
+        .reasons h2{
+
+            margin-bottom:15px;
+
+            font-size:20px;
+        }
+
+        .reasons ul{
+
+            padding-left:20px;
+        }
+
+        .reasons li{
+
+            margin-bottom:10px;
+
+            color:#e2e8f0;
+        }
+
+
+        #rain{
+
+            position:fixed;
+
+            top:0;
+            left:0;
+
+            width:100%;
+            height:100%;
+
+            z-index:0;
+
+            opacity:.35;
+
+            pointer-events:none;
+        }
+
+        .socials{
+
+            display:flex;
+
+            justify-content:center;
+
+            gap:18px;
+
+            margin-top:28px;
+        }
+
+        .social-btn{
+
+            width:55px;
+
+            height:55px;
+
+            border-radius:50%;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            text-decoration:none;
+
+            font-size:24px;
+
+            color:white;
+
+            background:rgba(255,255,255,.06);
+
+            border:1px solid rgba(255,255,255,.08);
+
+            transition:.3s;
+        }
+
+        .social-btn:hover{
+
+            transform:translateY(-5px) scale(1.05);
+
+            background:
+            linear-gradient(
+                135deg,
+                #2563eb,
+                #7c3aed
+            );
+
+            box-shadow:
+            0 10px 25px rgba(124,58,237,.45);
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="rain"></canvas>
+
+    <div class="bg"></div>
+    <div class="bg2"></div>
+
+    <div class="container">
+
+        <h1>🛡 AI Link Security</h1>
+
+        <div class="input-group">
+
+            <input
+                type="text"
+                id="urlInput"
+                placeholder="Link gir..."
+            >
+
+            <button onclick="analyzeURL()">
+                Analiz Et
+            </button>
+
+        </div>
+
+        <div class="loading" id="loading">
+
+            <div class="spinner"></div>
+
+            <p style="margin-top:15px;">
+                AI analiz ediyor...
+            </p>
+
+        </div>
+
+        <div class="result" id="result">
+
+            <div
+                class="status"
+                id="statusText"
+            ></div>
+
+            <div class="meter">
+
+                <div
+                    class="meter-fill"
+                    id="meterFill"
+                ></div>
+
+            </div>
+
+            <div class="grid">
+
+                <div class="card">
+                    <h3>Risk Skoru</h3>
+                    <p id="riskScore"></p>
+                </div>
+
+                <div class="card">
+                    <h3>AI Risk Analizi</h3>
+                    <p id="prediction"></p>
+                </div>
+
+                <div class="card">
+                    <h3>SSL</h3>
+                    <p id="ssl"></p>
+                </div>
+                
+
+                <div class="card">
+                    <h3>Domain Yaşı</h3>
+                    <p id="domainAge"></p>
+                </div>
+
+
+                <div class="card">
+                    <h3>Google Blacklist</h3>
+                    <p id="google"></p>
+                </div>
+
+                <div class="card">
+                    <h3>VirusTotal Malicious</h3>
+                    <p id="vtMal"></p>
+                </div>
+
+                <div class="card">
+                    <h3>VirusTotal Suspicious</h3>
+                    <p id="vtSusp"></p>
+                </div>
+
+                    <div class="socials">
+
+                        <a
+                            href="https://github.com/mermean"
+                            target="_blank"
+                            class="social-btn"
+                        >
+                            <i class="fab fa-github"></i>
+                        </a>
+
+                        <a
+                            href="https://www.linkedin.com/in/barış-yildirim-519828355/"
+                            target="_blank"
+                            class="social-btn"
+                        >
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+
+                        <a
+                            href="https://www.instagram.com/baris.yll?igsh=MTZjOTcyZ3hxN2ZwdA=="
+                            target="_blank"
+                            class="social-btn"
+                        >
+                            <i class="fab fa-instagram"></i>
+                        </a>
+
+                    </div>
+
+            </div>
+
+            <div class="reasons">
+
+                <h2>Notlar</h2>
+
+                <ul id="reasonsList"></ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        async function analyzeURL(){
+        
+            const urlInput =
+            document.getElementById("urlInput");
+
+            const url = urlInput.value.trim();
+
+            if(!url){
+
+                alert("Lütfen bir link girin.");
+
+                return;
+            }
+
+            const urlPattern =
+            /^(https?:\/\/)?([\w\-@]+\.)+[\w\-]+(\/[\w\-./?%&=@]*)?$/i;
+
+            if(!urlPattern.test(url)){
+
+                alert("Girdiğiniz şey geçerli bir link değil.");
+
+                return;
+            }
+
+            
+
+            document.getElementById("loading").style.display = "block";
+
+            document.getElementById("result").style.display = "none";
+               
+            try{
+
+                const response = await fetch(
+
+                    "http://127.0.0.1:5000/analyze",
+
+                    {
+
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+
+                        body:JSON.stringify({
+                            url:url
+                        })
+
+                    }
+
+                );
+
+                const data = await response.json();
+
+                document.getElementById("loading").style.display = "none";
+
+                document.getElementById("result").style.display = "block";
+
+
+                // STATUS
+                const statusText =
+                document.getElementById("statusText");
+
+                statusText.innerText =
+                data.status.toUpperCase();
+
+                statusText.className =
+                `status ${data.status}`;
+
+                // METER
+                const meterFill =
+                document.getElementById("meterFill");
+
+                meterFill.style.width =
+                `${Math.min(data.risk_score,100)}%`;
+
+                if(data.status === "safe"){
+
+                    meterFill.style.background =
+                    "#22c55e";
+                }
+
+                else if(data.status === "suspicious"){
+
+                    meterFill.style.background =
+                    "#facc15";
+                }
+
+                else{
+
+                    meterFill.style.background =
+                    "#ef4444";
+                }
+
+                        // CARDS
+                document.getElementById("riskScore").innerText =
+                data.risk_score;
+
+                document.getElementById("prediction").innerText =
+                data.prediction;
+
+                document.getElementById("ssl").innerText =
+                data.ssl_valid;
+
+                document.getElementById("domainAge").innerText =
+                data.domain_age_days
+                ? data.domain_age_days + " gün"
+                : "Doğrulanamadı";
+
+                document.getElementById("google").innerText =
+                data.google_flagged;
+
+                document.getElementById("vtMal").innerText =
+                data.virustotal_malicious;
+
+                document.getElementById("vtSusp").innerText =
+                data.virustotal_suspicious;
+
+
+                            // Reasons
+                const reasonsList =
+                document.getElementById("reasonsList");
+
+                reasonsList.innerHTML = "";
+
+                data.reasons.forEach(reason => {
+
+                    const li =
+                    document.createElement("li");
+
+                    li.innerText = reason;
+
+                    reasonsList.appendChild(li);
+
+                });
+
+            }
+
+
+
+            catch(error){
+
+                document.getElementById("loading").style.display = "none";
+                console.log(error);
+                alert(
+                    "Sunucuya bağlanılamadı veya bir hata oluştu."
+                );                
+            }
+
+
+
+            const canvas = document.getElementById("rain");
+
+            const ctx = canvas.getContext("2d");
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const rainDrops = [];
+
+            const columns = Math.floor(canvas.width / 20);
+
+            for(let i = 0; i < columns; i++){
+
+                rainDrops[i] = Math.random() * -500;
+            }
+
+            function drawRain(){
+
+                ctx.fillStyle = "rgba(2,6,23,0.08)";
+
+                ctx.fillRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                ctx.strokeStyle = "#38bdf8";
+
+                ctx.lineWidth = 1.2;
+
+                for(let i = 0; i < rainDrops.length; i++){
+
+                    const x = i * 20;
+
+                    const y = rainDrops[i];
+
+                    ctx.beginPath();
+
+                    ctx.moveTo(x, y);
+
+                    ctx.lineTo(x, y + 20);
+
+                    ctx.stroke();
+
+                    rainDrops[i] += 15;
+
+                    if(rainDrops[i] > canvas.height){
+
+                        rainDrops[i] = Math.random() * -200;
+                    }
+                }
+
+                requestAnimationFrame(drawRain);
+            }
+
+            drawRain();
+
+            window.addEventListener("resize", () => {
+
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+    </script>
+
+</body>
+
+</html>

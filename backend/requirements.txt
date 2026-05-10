@@ -1,0 +1,10 @@
+flask
+flask-cors
+requests
+scikit-learn
+python-dotenv
+tldextract
+python-whois
+joblib
+numpy
+pandas
