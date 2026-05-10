@@ -171,7 +171,7 @@ Domain yaşı analiz sisteminin çalışabilmesi için WhoisXMLAPI anahtarı ger
 Sign Up butonuna tıklayın.
 Hesabınızı oluşturun.
 
-3.E-posta doğrulamasını tamamlayın.
+3. E-posta doğrulamasını tamamlayın.
 
 4. API Paneline Girin
 
@@ -203,7 +203,9 @@ WHOIS_API_KEY=YOUR_WHOIS_API_KEY
 
 # Dataset Kurulumu
 
-Dataset dosyası güvenlik ve boyut nedeniyle repoya dahil edilmemiştir.
+Dataset dosyası güvenlik ve boyut nedeniyle repoya dahil edilmemiştir. Aşağıya bıraktığım link üzerinden indirilmesi gerekmektedir.
+
+```  https://www.kaggle.com/datasets/sid321axn/malicious-urls-dataset?resource=download  ```
 
 ## 1. dataset Klasörü Oluşturun
 
