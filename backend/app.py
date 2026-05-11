@@ -695,7 +695,7 @@ def analyze():
 
         status = "dangerous"
 
-    elif risk_score >= 50:
+    elif risk_score >= 60:
 
         status = "dangerous"
 
